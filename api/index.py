@@ -144,3 +144,5 @@ def download_csv():
     )
     response.headers["Content-Disposition"] = "attachment; filename=sunscreen_survey.csv"
     return response
+
+app = app
