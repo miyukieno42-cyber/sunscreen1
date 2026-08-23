@@ -1,16 +1,27 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, redirect, url_for, Response
 import sqlite3
 import csv
 import io
+from datetime import datetime
+
+
+# ========================================
+# Flaskアプリを作る
+# ========================================
 
 app = Flask(__name__)
+
+
+# ========================================
+# データベースの名前
+# ========================================
 
 DATABASE = "survey.db"
 
 
-# =========================
-# データベース作成
-# =========================
+# ========================================
+# データベースを作る関数
+# ========================================
 
 def init_db():
 
@@ -21,7 +32,21 @@ def init_db():
 
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            used TEXT,
+            created_at TEXT,
+
+            age_range TEXT,
+
+            frequency TEXT,
+
+            sunscreen_type TEXT,
+
+            reason TEXT,
+
+            feeling TEXT,
+
+            product TEXT,
+
+            usage_feeling TEXT,
 
             memory TEXT
 
@@ -33,9 +58,9 @@ def init_db():
     conn.close()
 
 
-# =========================
-# アンケート画面
-# =========================
+# ========================================
+# トップページ
+# ========================================
 
 @app.route("/")
 def index():
@@ -43,15 +68,57 @@ def index():
     return render_template("index.html")
 
 
-# =========================
-# 回答保存
-# =========================
+# ========================================
+# アンケート回答を受け取る
+# ========================================
 
 @app.route("/submit", methods=["POST"])
 def submit():
 
-    used = request.form.get(
-        "used",
+    # ----------------------------
+    # 単一選択
+    # ----------------------------
+
+    age_range = request.form.get(
+        "age_range",
+        ""
+    )
+
+    frequency = request.form.get(
+        "frequency",
+        ""
+    )
+
+    feeling = request.form.get(
+        "feeling",
+        ""
+    )
+
+
+    # ----------------------------
+    # 複数選択
+    # ----------------------------
+
+    sunscreen_type = request.form.getlist(
+        "sunscreen_type"
+    )
+
+    reason = request.form.getlist(
+        "reason"
+    )
+
+
+    # ----------------------------
+    # 記述
+    # ----------------------------
+
+    product = request.form.get(
+        "product",
+        ""
+    )
+
+    usage_feeling = request.form.get(
+        "usage_feeling",
         ""
     )
 
@@ -61,113 +128,167 @@ def submit():
     )
 
 
-    conn = sqlite3.connect(DATABASE)
+    # ----------------------------
+    # 複数選択を文字列に変換
+    # ----------------------------
 
+    sunscreen_type_text = ", ".join(
+        sunscreen_type
+    )
+
+    reason_text = ", ".join(
+        reason
+    )
+
+
+    # ----------------------------
+    # 回答日時
+    # ----------------------------
+
+    created_at = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+
+    # ----------------------------
+    # データベースに保存
+    # ----------------------------
+
+    conn = sqlite3.connect(DATABASE)
 
     conn.execute(
         """
         INSERT INTO responses
-        (used, memory)
+        (
+            created_at,
+            age_range,
+            frequency,
+            sunscreen_type,
+            reason,
+            feeling,
+            product,
+            usage_feeling,
+            memory
+        )
 
-        VALUES (?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
 
         (
-            used,
+            created_at,
+            age_range,
+            frequency,
+            sunscreen_type_text,
+            reason_text,
+            feeling,
+            product,
+            usage_feeling,
             memory
         )
     )
-
 
     conn.commit()
 
     conn.close()
 
 
-    return """
-    <html lang="ja">
+    # ----------------------------
+    # 完了画面へ
+    # ----------------------------
 
-    <head>
-        <meta charset="UTF-8">
-
-        <title>
-            回答ありがとうございました
-        </title>
-    </head>
-
-    <body>
-
-        <h1>
-            🌸 ありがとうございました！
-        </h1>
-
-        <p>
-            アンケートの回答を保存しました。
-        </p>
-
-        <p>
-            <a href="/">
-                もう一度回答する
-            </a>
-        </p>
-
-        <p>
-            <a href="/download_csv">
-                CSVをダウンロードする
-            </a>
-        </p>
-
-    </body>
-
-    </html>
-    """
+    return redirect(
+        url_for("thanks")
+    )
 
 
-# =========================
+# ========================================
+# 送信完了ページ
+# ========================================
+
+@app.route("/thanks")
+def thanks():
+
+    return render_template(
+        "thanks.html"
+    )
+
+
+# ========================================
 # CSVダウンロード
-# =========================
+# ========================================
 
 @app.route("/download_csv")
 def download_csv():
 
     conn = sqlite3.connect(DATABASE)
 
-    cursor = conn.execute("""
+    cursor = conn.execute(
+        """
         SELECT
             id,
-            used,
+            created_at,
+            age_range,
+            frequency,
+            sunscreen_type,
+            reason,
+            feeling,
+            product,
+            usage_feeling,
             memory
+
         FROM responses
-        ORDER BY id DESC
-    """)
+
+        ORDER BY id
+        """
+    )
+
 
     rows = cursor.fetchall()
 
     conn.close()
 
 
+    # ----------------------------
+    # CSVをメモリ上で作る
+    # ----------------------------
+
     output = io.StringIO()
 
-    writer = csv.writer(output)
+    writer = csv.writer(
+        output
+    )
 
 
-    # 見出し
+    # ヘッダー
 
     writer.writerow([
         "ID",
-        "日焼け止め使用状況",
-        "子どもの頃の思い出"
+        "回答日時",
+        "年代",
+        "使用頻度",
+        "日焼け止めタイプ",
+        "使用理由",
+        "印象",
+        "商品名",
+        "使用時の気持ち",
+        "思い出"
     ])
 
 
     # データ
 
-    writer.writerows(rows)
+    writer.writerows(
+        rows
+    )
 
+
+    # ----------------------------
+    # CSVを返す
+    # ----------------------------
 
     response = Response(
         output.getvalue(),
-        mimetype="text/csv"
+        mimetype="text/csv; charset=utf-8"
     )
 
 
@@ -182,65 +303,14 @@ def download_csv():
     return response
 
 
-# =========================
+# ========================================
 # アプリ起動
-# =========================
+# ========================================
 
 if __name__ == "__main__":
 
     init_db()
 
     app.run(
-        host="127.0.0.1",
-        port=5000,
         debug=True
-    )# 回答を保存
-@app.route("/submit", methods=["POST"])
-def submit():
-
-    used = request.form.get("used", "")
-
-    memory = request.form.get("memory", "")
-
-
-    conn = sqlite3.connect("survey.db")
-
-
-    conn.execute(
-        """
-        INSERT INTO responses
-        (used, memory)
-
-        VALUES (?, ?)
-        """,
-
-        (used, memory)
-    )
-
-
-    conn.commit()
-
-    conn.close()
-
-
-    return """
-    <h1>🌸 ありがとうございました！</h1>
-
-    <p>
-        アンケートの回答を保存しました。
-    </p>
-
-    <a href="/">
-        もう一度回答する
-    </a>
-    """
-
-
-if __name__ == "__main__":
-
-    init_db()
-
-    app.run(
-        host="0.0.0.0",
-        port=5000
     )
