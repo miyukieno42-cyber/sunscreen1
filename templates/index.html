@@ -1,1 +1,107 @@
+<!DOCTYPE html>
 
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        こどものころの日焼け止めアンケート
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <main class="survey-card">
+
+        <h1>
+            ☀️ こどものころの<br>
+            日焼け止めアンケート
+        </h1>
+
+        <p>
+            子どものころを思い出しながら<br>
+            気軽に答えてください🌷
+        </p>
+
+
+        <form method="POST" action="/submit">
+
+
+            <h2>
+                Q1. 子どもの頃、日焼け止めを使っていましたか？
+            </h2>
+
+
+            <label>
+                <input
+                    type="radio"
+                    name="used"
+                    value="よく使っていた"
+                >
+
+                よく使っていた
+            </label>
+
+
+            <br>
+
+
+            <label>
+                <input
+                    type="radio"
+                    name="used"
+                    value="たまに使っていた"
+                >
+
+                たまに使っていた
+            </label>
+
+
+            <br>
+
+
+            <label>
+                <input
+                    type="radio"
+                    name="used"
+                    value="ほとんど使わなかった"
+                >
+
+                ほとんど使わなかった
+            </label>
+
+
+            <h2>
+                Q2. 覚えていることがあれば教えてください
+            </h2>
+
+
+            <textarea
+                name="memory"
+                placeholder="自由に書いてください🌸"
+            ></textarea>
+
+
+            <button type="submit">
+                回答を送信する 💌
+            </button>
+
+
+        </form>
+
+    </main>
+
+</body>
+
+</html>
