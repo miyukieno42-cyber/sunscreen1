@@ -5,7 +5,11 @@ import io
 import os
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder="../templates",
+    static_folder="../static"
+)
 
 # Vercelの一時領域にDBを作成
 DATABASE = "/tmp/survey.db"
