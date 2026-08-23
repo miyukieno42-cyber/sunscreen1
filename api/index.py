@@ -5,7 +5,7 @@ import io
 import os
 from datetime import datetime
 
-# フォルダの位置を自動計算してtemplatesとstaticを読み込む
+# api/ の親フォルダ（ルート）を基準として設定
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 app = Flask(
@@ -144,6 +144,3 @@ def download_csv():
     )
     response.headers["Content-Disposition"] = "attachment; filename=sunscreen_survey.csv"
     return response
-
-if __name__ == "__main__":
-    app.run(debug=True)
