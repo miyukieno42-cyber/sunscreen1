@@ -5,8 +5,7 @@ import io
 import os
 from datetime import datetime
 
-import os
-
+# フォルダの位置を自動計算してtemplatesとstaticを読み込む
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 app = Flask(
@@ -15,11 +14,9 @@ app = Flask(
     static_folder=os.path.join(BASE_DIR, 'static')
 )
 
-# Vercelの一時保存フォルダ（/tmp）にDBを作成
 DATABASE = "/tmp/survey.db"
 
 def get_db():
-    """データベースに接続し、テーブルがなければ作成する"""
     conn = sqlite3.connect(DATABASE)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS responses (
@@ -60,7 +57,6 @@ def submit():
 
     created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # データベース保存（get_db() で接続）
     conn = get_db()
     conn.execute(
         """
@@ -151,5 +147,3 @@ def download_csv():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-app=app
