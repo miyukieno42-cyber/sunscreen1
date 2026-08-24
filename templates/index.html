@@ -132,27 +132,51 @@
                 <button type="button" class="next-button">次へ　→</button>
             </section>
             
-            <section class="question" data-question="10">
-                <div class="question-label">Question 10</div>
-                <h2>日焼け止めのマイナスなイメージがあるとすれば<br>どんなことですか　</h2>
-                <p class="hint">ひとつ選んでください</p>
-                <div class="option">
-                    <input type="radio" name="feelingnow" value="べたべたする" required><span>べたべたする</span></label>
-                    <input tppe="radio" name="feelingnow" value="面倒" required><span>面倒</span></label>
-                    <input tppe="radio" name="feelingnow" value="ネガティブなところはない" required><span>ネガティブなところはない</span></label>
-                    <input class="option">
-                        <input type="radio" name="feelingnow" value="その他" id="feelingnowOther"<span>その他</span></label>
-                    <input
-                        type="text"
-                        name="feelingnow"
-                        id="feelingnowOtherText"
-                        class="text-input"
-                        placeholder="その他の内容を入力してください"
-                        style="display: none; margin-top: 10px;"
-                        >
-                    <button type="button" class="next-button">次へ　→</button>
-                </div>
-                </section>
+           <section class="question" data-question="10">
+    <div class="question-label">Question 10</div>
+
+    <h2>
+        日焼け止めのマイナスなイメージがあるとすれば<br>
+        どんなことですか
+    </h2>
+
+    <p class="hint">ひとつ選んでください</p>
+
+    <div class="options">
+
+        <label class="option">
+            <input type="radio" name="feelingnow" value="べたべたする" required>
+            <span>べたべたする</span>
+        </label>
+
+        <label class="option">
+            <input type="radio" name="feelingnow" value="面倒">
+            <span>面倒</span>
+        </label>
+
+        <label class="option">
+            <input type="radio" name="feelingnow" value="ネガティブなところはない">
+            <span>ネガティブなところはない</span>
+        </label>
+
+        <label class="option">
+            <input type="radio" name="feelingnow" value="その他" id="feelingnowOther">
+            <span>その他</span>
+        </label>
+
+        <input
+            type="text"
+            name="feelingnow_other"
+            id="feelingnowOtherText"
+            class="text-input"
+            placeholder="その他の内容を入力してください"
+            style="display: none;"
+        >
+
+    </div>
+
+    <button type="button" class="next-button">次へ →</button>
+</section>
             
             <section class="question" data-question="11">
                 <div class="question-label">Question 11</div>
