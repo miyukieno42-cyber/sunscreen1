@@ -39,7 +39,9 @@ def index():
 
 @app.route("/submit", methods=["POST"])
 def submit():
+    # 子どもの頃
     age_range = request.form.get("age_range", "")
+    gender = request.form.get("gender", "")
     frequency = request.form.get("frequency", "")
     feeling = request.form.get("feeling", "")
 
@@ -49,6 +51,34 @@ def submit():
     product = request.form.get("product", "")
     usage_feeling = request.form.get("usage_feeling", "")
     memory = request.form.get("memory", "")
+
+    # 現在
+    feelingnow = request.form.get("feelingnow", "")
+    frequencynow = request.form.get("frequencynow", "")
+    valuenow = request.form.get("valuenow", "")
+    value11now = request.form.get("value11now", "")
+    important = request.form.get("important", "")
+    want = request.form.get("want", "")
+
+    # 「その他」の自由記述
+    feelingnow_other = request.form.get("feelingnow_other", "")
+    important_other = request.form.get("important_other", "")
+    want_other = request.form.get("want_other", "")
+
+    # その他の内容を回答に追加
+    if feelingnow == "その他" and feelingnow_other:
+        feelingnow = f"その他: {feelingnow_other}"
+
+    if important == "その他" and important_other:
+        important = f"その他: {important_other}"
+
+    if want == "その他" and want_other:
+        want = f"その他: {want_other}"
+
+    sunscreen_type_text = ", ".join(sunscreen_type)
+    reason_text = ", ".join(reason)
+
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     sunscreen_type_text = ", ".join(sunscreen_type)
     reason_text = ", ".join(reason)
