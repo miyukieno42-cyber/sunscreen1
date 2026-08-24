@@ -50,3 +50,26 @@ form.addEventListener("submit", (event) => {
 });
 
 showQuestion(0);
+
+// 「その他」を選んだときだけ記述欄を表示する
+const otherPairs = [
+    ["feelingnowOther", "feelingnowOtherText"],
+    ["importantOther", "importantOtherText"],
+    ["wantOther", "wantOtherText"]
+];
+
+otherPairs.forEach(([checkboxId, textId]) => {
+    const otherOption = document.getElementById(checkboxId);
+    const otherText = document.getElementById(textId);
+
+    if (otherOption && otherText) {
+        otherOption.addEventListener("change", () => {
+            if (otherOption.checked) {
+                otherText.style.display = "block";
+            } else {
+                otherText.style.display = "none";
+                otherText.value = "";
+            }
+        });
+    }
+});
