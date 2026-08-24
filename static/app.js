@@ -73,3 +73,16 @@ otherPairs.forEach(([checkboxId, textId]) => {
         });
     }
 });
+const feelingnowOther = document.getElementById("feelingnowOther");
+const feelingnowOtherText = document.getElementById("feelingnowOtherText");
+
+if (feelingnowOther && feelingnowOtherText) {
+    feelingnowOther.addEventListener("change", function () {
+        if (this.checked) {
+            feelingnowOtherText.style.display = "block";
+        } else {
+            feelingnowOtherText.style.display = "none";
+            feelingnowOtherText.value = "";
+        }
+    });
+}
