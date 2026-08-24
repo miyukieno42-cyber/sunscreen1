@@ -63,8 +63,8 @@ otherPairs.forEach(([checkboxId, textId]) => {
     const otherText = document.getElementById(textId);
 
     if (otherOption && otherText) {
-        otherOption.addEventListener("change", () => {
-            if (otherOption.checked) {
+        otherOption.addEventListener("change", function () {
+            if (this.checked) {
                 otherText.style.display = "block";
             } else {
                 otherText.style.display = "none";
@@ -73,16 +73,3 @@ otherPairs.forEach(([checkboxId, textId]) => {
         });
     }
 });
-const feelingnowOther = document.getElementById("feelingnowOther");
-const feelingnowOtherText = document.getElementById("feelingnowOtherText");
-
-if (feelingnowOther && feelingnowOtherText) {
-    feelingnowOther.addEventListener("change", function () {
-        if (this.checked) {
-            feelingnowOtherText.style.display = "block";
-        } else {
-            feelingnowOtherText.style.display = "none";
-            feelingnowOtherText.value = "";
-        }
-    });
-}
