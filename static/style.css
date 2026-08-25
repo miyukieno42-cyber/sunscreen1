@@ -225,3 +225,19 @@ h2 {
     color: #777;
     margin: 15px 0;
 }
+.current-section {
+    background: #f0f8ff;
+}
+
+.current-section .question-label {
+    color: #4a90c2;
+}
+
+.current-section .next-button {
+    background: #4a90c2;
+}
+
+.current-section .option:has(input:checked) {
+    border-color: #4a90c2;
+    background: #e5f3ff;
+}
