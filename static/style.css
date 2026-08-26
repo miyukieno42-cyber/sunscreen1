@@ -83,6 +83,7 @@ h1 {
         opacity: 0;
         transform: translateX(15px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -212,32 +213,110 @@ h2 {
         padding: 25px 20px;
         border-radius: 25px;
     }
+
     h1 {
         font-size: 24px;
     }
+
     h2 {
         font-size: 19px;
     }
 }
+
 .example {
     font-size: 14px;
     line-height: 1.7;
     color: #777;
     margin: 15px 0;
 }
+
+
+/* =========================================
+   Q11〜Q15：現在の日焼け止め
+   ========================================= */
+
+/* 質問全体の青い背景はなし */
 .current-section {
     background: transparent;
 }
 
+/* Questionラベル */
 .current-section .question-label {
+    background: #e5f3ff;
     color: #4a90c2;
 }
 
+
+/* 選択肢をQ1と同じ縦並びにする */
+.current-section .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* 選択前：薄い青 */
+.current-section .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #f0f8ff;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+/* マウスを乗せたとき */
+.current-section .option:hover {
+    background: #e8f4fc;
+    transform: translateY(-2px);
+}
+
+
+/* 選択したとき：濃いめの青 */
+.current-section .option:has(input:checked) {
+    background: #dceefe;
+    border-color: #4a90c2;
+}
+
+
+/* ラジオボタン */
+.current-section .option input {
+    accent-color: #4a90c2;
+}
+
+
+/* 選択肢の文字 */
+.current-section .option span {
+    font-size: 15px;
+}
+
+
+/* Q11〜Q15の「次へ」ボタン */
 .current-section .next-button {
     background: #4a90c2;
 }
 
-.current-section .option:has(input:checked) {
+
+/* 青い「次へ」ボタンのホバー */
+.current-section .next-button:hover {
+    box-shadow: 0 8px 20px rgba(74, 144, 194, 0.25);
+}
+
+
+/* =========================================
+   現在ページの入力欄
+   ========================================= */
+
+.current-section .text-input,
+.current-section .textarea {
+    border-color: #d8eaf5;
+}
+
+.current-section .text-input:focus,
+.current-section .textarea:focus {
     border-color: #4a90c2;
-    background: #e5f3ff;
 }
