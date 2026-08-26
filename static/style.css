@@ -226,7 +226,7 @@ h2 {
     margin: 15px 0;
 }
 .current-section {
-    background: #f0f8ff;
+    background: transparent;
 }
 
 .current-section .question-label {
