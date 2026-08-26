@@ -89,7 +89,16 @@
                     <label class="option"><input type="checkbox" name="reason" value="肌を守るため"><span>肌を守るため</span></label>
                     <label class="option"><input type="checkbox" name="reason" value="学校・部活動・行事"><span>学校・部活動・行事</span></label>
                     <label class="option"><input type="checkbox" name="reason" value="海・プール"><span>海・プール</span></label>
-                    <label class="option"><input type="checkbox" name="reason" value="その他"><span>その他</span></label>
+                    <label class="option">
+                        <input type="radio" name="important" value="その他" id="importantOther"><span>その他</span></label>
+                    <input
+                        type="text"
+                        name="important_other"
+                        id="importantOtherText"
+                        class="text-input"
+                        placeholder="その他の内容を入力してください"
+                        style="display: none;"
+                        >
                     <label class="option"><input type="checkbox" name="reason" value="特に理由はない"><span>特に理由はない</span></label>
                 </div>
                 <button type="button" class="next-button">次へ →</button>
@@ -192,7 +201,7 @@
                 <div class="options">
                     <label class="option"><input type="radio" name="value11now" value="日焼け止めはとても大切だと思う" required><span>日焼け止めはとても大切だと思う</span></label>
                     <label class="option"><input type="radio" name="value11now" value="場合によっては大切"><span>場合によっては大切</span></label>
-                    <label class="option"><input type="radio" name="value11now" value="特に大切ではないと思う"><span>特に大切ではないと思う</span></label>
+                    <label class="option"><input type="radio" name="value11now" value="大切ではないと思う"><span>大切ではないと思う</span></label>
                 </div>
                 <button type="button" class="next-button">次へ　→</button>
             </section>
@@ -229,8 +238,9 @@
                     <label class="option"><input type="radio" name="want" value="使いたい！" required><span>使いたい！</span></label>
                     <label class="option"><input type="radio" name="want" value="一度は使ってみたい<"><span>一度は使ってみたい</span></label>
                     <label class="option"><input type="radio" name="want" value="興味はあるが、買うほどではない"><span>興味はあるが、買うほどではない</span></label>
-                    <label class="option"><input type="radio" name="want" value="興味ない"><span>興味ない</span></label><label class="option"><input type="radio" name="want" value="パッケージ"><span>パッケージ</span></label><label class="option">
-                        <input type="radio" name="want" value="その他" id="wantOther"><span>その他</span></label>
+                    <label class="option"><input type="radio" name="want" value="興味ない"><span>興味ない</span></label>
+                    <label class="option">
+                         <input type="radio" name="want" value="その他" id="wantOther"><span>その他</span></label>
                     <input
                         type="text"
                         name="want_other"
