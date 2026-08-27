@@ -392,3 +392,23 @@ h2 {
         border-radius: 22px;
     }
 }
+/* Thanksページのお名前・メールアドレス */
+.contact-info {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.contact-name {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #665b63;
+}
+
+.contact-email {
+    margin: 0;
+    font-size: 14px;
+    color: #9b8c94;
+}
