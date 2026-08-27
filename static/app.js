@@ -55,7 +55,8 @@ nextButtons.forEach((button) => {
         const current = questions[currentQuestion];
 
         // 必須項目をチェック
-        const requiredInputs = current.querySelectorAll("input[required]");
+        const requiredInputs =
+            current.querySelectorAll("input[required]");
 
         for (const input of requiredInputs) {
 
@@ -65,8 +66,8 @@ nextButtons.forEach((button) => {
 
                 return;
             }
-
         }
+
 
         // 次のページへ
         if (currentQuestion < totalQuestions - 1) {
@@ -75,7 +76,6 @@ nextButtons.forEach((button) => {
 
             showQuestion(currentQuestion);
 
-            // ページ上部へ戻す
             window.scrollTo({
                 top: 0,
                 behavior: "smooth"
@@ -88,28 +88,20 @@ nextButtons.forEach((button) => {
 
 
 /* =========================
-   戻るボタンを全ページに追加
+   戻るボタン
 ========================= */
 
-questions.forEach((question, index) => {
+/*
+   HTMLにすでに戻るボタンがあるので、
+   JavaScriptでは新しく作らない。
+*/
 
-    // Q1には戻るボタンを表示しない
-    if (index === 0) {
-        return;
-    }
+const backButtons =
+    document.querySelectorAll(".back-button");
 
-    // 戻るボタンを作る
-    const backButton = document.createElement("button");
+backButtons.forEach((button) => {
 
-    backButton.type = "button";
-
-    backButton.className = "back-button";
-
-    backButton.textContent = "← 戻る";
-
-
-    // 戻るボタンをクリック
-    backButton.addEventListener("click", () => {
+    button.addEventListener("click", () => {
 
         if (currentQuestion > 0) {
 
@@ -117,24 +109,14 @@ questions.forEach((question, index) => {
 
             showQuestion(currentQuestion);
 
-            // ページ上部へ戻す
             window.scrollTo({
                 top: 0,
                 behavior: "smooth"
             });
+
         }
 
     });
-
-
-    // 「次へ」ボタンの前に入れる
-    const nextButton = question.querySelector(".next-button");
-
-    if (nextButton) {
-
-        question.insertBefore(backButton, nextButton);
-
-    }
 
 });
 
@@ -143,7 +125,8 @@ questions.forEach((question, index) => {
    送信時のチェック
 ========================= */
 
-const form = document.getElementById("surveyForm");
+const form =
+    document.getElementById("surveyForm");
 
 form.addEventListener("submit", (event) => {
 
@@ -170,9 +153,16 @@ showQuestion(0);
    「その他」の入力欄
 ========================= */
 
-// Q10
-const feelingnowOther = document.getElementById("feelingnowOther");
-const feelingnowOtherText = document.getElementById("feelingnowOtherText");
+
+/* -------------------------
+   Q10
+------------------------- */
+
+const feelingnowOther =
+    document.getElementById("feelingnowOther");
+
+const feelingnowOtherText =
+    document.getElementById("feelingnowOtherText");
 
 if (feelingnowOther && feelingnowOtherText) {
 
@@ -181,11 +171,13 @@ if (feelingnowOther && feelingnowOtherText) {
         if (this.checked) {
 
             feelingnowOtherText.style.display = "block";
+
             feelingnowOtherText.focus();
 
         } else {
 
             feelingnowOtherText.style.display = "none";
+
             feelingnowOtherText.value = "";
 
         }
@@ -195,9 +187,15 @@ if (feelingnowOther && feelingnowOtherText) {
 }
 
 
-// Q14
-const importantOther = document.getElementById("importantOther");
-const importantOtherText = document.getElementById("importantOtherText");
+/* -------------------------
+   Q14
+------------------------- */
+
+const importantOther =
+    document.getElementById("importantOther");
+
+const importantOtherText =
+    document.getElementById("importantOtherText");
 
 if (importantOther && importantOtherText) {
 
@@ -206,11 +204,13 @@ if (importantOther && importantOtherText) {
         if (this.checked) {
 
             importantOtherText.style.display = "block";
+
             importantOtherText.focus();
 
         } else {
 
             importantOtherText.style.display = "none";
+
             importantOtherText.value = "";
 
         }
@@ -220,9 +220,15 @@ if (importantOther && importantOtherText) {
 }
 
 
-// Q15
-const wantOther = document.getElementById("wantOther");
-const wantOtherText = document.getElementById("wantOtherText");
+/* -------------------------
+   Q15
+------------------------- */
+
+const wantOther =
+    document.getElementById("wantOther");
+
+const wantOtherText =
+    document.getElementById("wantOtherText");
 
 if (wantOther && wantOtherText) {
 
@@ -231,11 +237,13 @@ if (wantOther && wantOtherText) {
         if (this.checked) {
 
             wantOtherText.style.display = "block";
+
             wantOtherText.focus();
 
         } else {
 
             wantOtherText.style.display = "none";
+
             wantOtherText.value = "";
 
         }
