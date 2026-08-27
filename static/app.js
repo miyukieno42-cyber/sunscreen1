@@ -1,55 +1,27 @@
 const questions = document.querySelectorAll(".question");
 let currentQuestion = 0;
+const totalQuestions = questions.length;
 
-// CURRENTの説明ページは「質問数」に含めない
-const actualQuestions = document.querySelectorAll(
-    ".question:not(.section-intro-page)"
-);
 
-const totalQuestions = actualQuestions.length;
+/* =========================
+   進捗バー
+========================= */
 
-// ==============================
-// 進捗表示
-// ==============================
 function updateProgress() {
-    const currentPage = questions[currentQuestion];
+    const current = currentQuestion + 1;
 
-    // CURRENTの説明ページなら、Q10の次として表示
-    if (currentPage.classList.contains("section-intro-page")) {
-        document.getElementById("currentQuestion").textContent =
-            actualQuestions.length > 0
-                ? Array.from(actualQuestions).indexOf(
-                      questions[currentQuestion - 1]
-                  ) + 1
-                : 1;
-    } else {
-        const actualIndex = Array.from(actualQuestions).indexOf(currentPage);
-
-        document.getElementById("currentQuestion").textContent =
-            actualIndex + 1;
-    }
-
+    document.getElementById("currentQuestion").textContent = current;
     document.getElementById("totalQuestions").textContent = totalQuestions;
 
-    // 現在のページに合わせて進捗バーを動かす
-    let progressPercent;
-
-    if (currentPage.classList.contains("section-intro-page")) {
-        // CURRENT説明ページはQ10とQ11の間なので10問目の位置
-        progressPercent = (10 / totalQuestions) * 100;
-    } else {
-        const actualIndex = Array.from(actualQuestions).indexOf(currentPage);
-        progressPercent = ((actualIndex + 1) / totalQuestions) * 100;
-    }
-
-    document.getElementById("progress").style.width =
-        progressPercent + "%";
+    const progress = (current / totalQuestions) * 100;
+    document.getElementById("progress").style.width = progress + "%";
 }
 
 
-// ==============================
-// 質問を表示
-// ==============================
+/* =========================
+   質問を表示
+========================= */
+
 function showQuestion(number) {
     questions.forEach((question, index) => {
         question.classList.remove("active");
@@ -60,32 +32,17 @@ function showQuestion(number) {
     });
 
     updateProgress();
-
-    // Q1では「戻る」を表示しない
-    const backButtons = questions[number].querySelectorAll(".back-button");
-
-    backButtons.forEach((button) => {
-        if (number === 0) {
-            button.style.display = "none";
-        } else {
-            button.style.display = "block";
-        }
-    });
-
-    // ページが変わったら上まで戻す
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
 }
 
 
-// ==============================
-// 次へボタン
-// ==============================
+/* =========================
+   次へボタン
+========================= */
+
 const nextButtons = document.querySelectorAll(".next-button");
 
 nextButtons.forEach((button) => {
+
     button.addEventListener("click", () => {
 
         const current = questions[currentQuestion];
@@ -100,75 +57,101 @@ nextButtons.forEach((button) => {
             }
         }
 
-        // 次のページへ
-        if (currentQuestion < questions.length - 1) {
+        // 次の質問へ
+        if (currentQuestion < totalQuestions - 1) {
             currentQuestion++;
             showQuestion(currentQuestion);
         }
     });
+
 });
 
 
-// ==============================
-// 戻るボタン
-// ==============================
-const backButtons = document.querySelectorAll(".back-button");
+/* =========================
+   送信時のチェック
+========================= */
 
-backButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-
-        if (currentQuestion > 0) {
-            currentQuestion--;
-            showQuestion(currentQuestion);
-        }
-    });
-});
-
-
-// ==============================
-// フォーム送信
-// ==============================
 const form = document.getElementById("surveyForm");
 
 form.addEventListener("submit", (event) => {
+
     if (!form.checkValidity()) {
         event.preventDefault();
         form.reportValidity();
         return;
     }
+
 });
 
 
-// ==============================
-// 「その他」の入力欄
-// ==============================
-const otherPairs = [
-    ["feelingnowOther", "feelingnowOtherText"],
-    ["importantOther", "importantOtherText"],
-    ["wantOther", "wantOtherText"]
-];
+/* =========================
+   最初の質問を表示
+========================= */
 
-otherPairs.forEach(([otherId, textId]) => {
-    const otherOption = document.getElementById(otherId);
-    const otherText = document.getElementById(textId);
-
-    if (otherOption && otherText) {
-
-        otherOption.addEventListener("change", function () {
-
-            if (this.checked) {
-                otherText.style.display = "block";
-            } else {
-                otherText.style.display = "none";
-                otherText.value = "";
-            }
-
-        });
-    }
-});
-
-
-// ==============================
-// 最初のページを表示
-// ==============================
 showQuestion(0);
+
+
+/* =========================
+   「その他」の入力欄
+========================= */
+
+// Q10
+const feelingnowOther = document.getElementById("feelingnowOther");
+const feelingnowOtherText = document.getElementById("feelingnowOtherText");
+
+if (feelingnowOther && feelingnowOtherText) {
+
+    feelingnowOther.addEventListener("change", function () {
+
+        if (this.checked) {
+            feelingnowOtherText.style.display = "block";
+        } else {
+            feelingnowOtherText.style.display = "none";
+            feelingnowOtherText.value = "";
+        }
+
+    });
+
+}
+
+
+// Q14
+const importantOther = document.getElementById("importantOther");
+const importantOtherText = document.getElementById("importantOtherText");
+
+if (importantOther && importantOtherText) {
+
+    importantOther.addEventListener("change", function () {
+
+        if (this.checked) {
+            importantOtherText.style.display = "block";
+            importantOtherText.focus();
+        } else {
+            importantOtherText.style.display = "none";
+            importantOtherText.value = "";
+        }
+
+    });
+
+}
+
+
+// Q15
+const wantOther = document.getElementById("wantOther");
+const wantOtherText = document.getElementById("wantOtherText");
+
+if (wantOther && wantOtherText) {
+
+    wantOther.addEventListener("change", function () {
+
+        if (this.checked) {
+            wantOtherText.style.display = "block";
+            wantOtherText.focus();
+        } else {
+            wantOtherText.style.display = "none";
+            wantOtherText.value = "";
+        }
+
+    });
+
+}
