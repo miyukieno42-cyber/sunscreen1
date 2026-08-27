@@ -2,11 +2,24 @@
     box-sizing: border-box;
 }
 
+
+/* =========================
+   全体
+========================= */
+
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Hiragino Sans",
+        "Yu Gothic",
+        sans-serif;
+
     color: #665b63;
+
     background: linear-gradient(
         135deg,
         #fff1f5 0%,
@@ -15,15 +28,30 @@ body {
     );
 }
 
+
+/* =========================
+   アンケートカード
+========================= */
+
 .survey-card {
     width: calc(100% - 32px);
     max-width: 650px;
+
     margin: 40px auto;
     padding: 35px 30px;
+
     background: rgba(255, 255, 255, 0.92);
+
     border-radius: 32px;
-    box-shadow: 0 20px 60px rgba(150, 120, 140, 0.15);
+
+    box-shadow:
+        0 20px 60px rgba(150, 120, 140, 0.15);
 }
+
+
+/* =========================
+   ヘッダー
+========================= */
 
 .header {
     text-align: center;
@@ -37,15 +65,24 @@ body {
 
 h1 {
     margin: 0;
+
     line-height: 1.5;
+
     font-size: 28px;
+
     color: #705f68;
 }
 
 .header p {
     line-height: 1.8;
+
     color: #9b8c94;
 }
+
+
+/* =========================
+   進捗バー
+========================= */
 
 .progress-area {
     margin-bottom: 30px;
@@ -53,26 +90,41 @@ h1 {
 
 .progress-text {
     text-align: right;
+
     font-size: 13px;
+
     color: #ad9ca5;
+
     margin-bottom: 8px;
 }
 
 .progress-bar {
     width: 100%;
     height: 8px;
+
     background: #f6e7ed;
+
     border-radius: 20px;
+
     overflow: hidden;
 }
 
 .progress {
     height: 100%;
+
     width: 6.67%;
+
     background: #f2b5c9;
+
     border-radius: 20px;
+
     transition: width 0.4s ease;
 }
+
+
+/* =========================
+   質問ページ
+========================= */
 
 .question {
     display: none;
@@ -80,10 +132,13 @@ h1 {
 
 .question.active {
     display: block;
+
     animation: fadeIn 0.4s ease;
 }
 
+
 @keyframes fadeIn {
+
     from {
         opacity: 0;
         transform: translateX(15px);
@@ -96,216 +151,326 @@ h1 {
 }
 
 
-/* ==============================
+/* =========================
    Question ラベル
-   ============================== */
+========================= */
 
 .question-label {
     display: inline-block;
+
     padding: 6px 14px;
+
     margin-bottom: 15px;
+
     border-radius: 20px;
+
     background: #fce5ed;
+
     color: #b5798d;
+
     font-size: 13px;
+
     font-weight: bold;
 }
 
+
+/* =========================
+   見出し
+========================= */
+
 h2 {
     margin-top: 0;
+
     line-height: 1.7;
+
     font-size: 21px;
 }
 
+
+/* =========================
+   ヒント
+========================= */
+
 .hint {
     margin-bottom: 20px;
+
     color: #aa9ba2;
+
     font-size: 14px;
 }
 
 
-/* ==============================
-   選択肢
-   ============================== */
+/* =========================
+   選択肢全体
+========================= */
 
 .options {
     display: flex;
+
     flex-direction: column;
+
     gap: 12px;
 }
+
+
+/* =========================
+   選択肢
+========================= */
 
 .option {
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     width: 100%;
+
     padding: 16px;
+
     border-radius: 18px;
+
     background: #fff6f8;
+
     border: 2px solid transparent;
+
     cursor: pointer;
+
     transition: 0.2s ease;
 }
 
+
+/* 選択肢にマウスを乗せたとき */
+
 .option:hover {
     background: #fff0f4;
+
     transform: translateY(-2px);
 }
 
+
+/* 選択したとき */
+
 .option:has(input:checked) {
     background: #ffe8ef;
+
     border-color: #f2b5c9;
 }
+
+
+/* ラジオ・チェックボックス */
 
 .option input {
     accent-color: #e89ab3;
 }
+
+
+/* 選択肢の文字 */
 
 .option span {
     font-size: 15px;
 }
 
 
-/* ==============================
+/* =========================
    テキスト入力
-   ============================== */
+========================= */
 
 .text-input,
 .textarea {
     width: 100%;
+
     padding: 16px;
+
     border: 2px solid #f0dfe6;
+
     border-radius: 18px;
+
     background: #fffafa;
+
     color: #665b63;
+
     font-size: 16px;
+
     font-family: inherit;
+
     outline: none;
 }
+
 
 .text-input {
     height: 55px;
 }
 
+
 .textarea {
     min-height: 180px;
+
     resize: vertical;
+
     line-height: 1.7;
 }
+
+
+/* 入力中 */
 
 .text-input:focus,
 .textarea:focus {
     border-color: #efb2c6;
+
     background: white;
 }
 
 
-/* ==============================
+/* =========================
    次へ・送信ボタン
-   ============================== */
+========================= */
 
 .next-button,
 .submit-button {
+    display: block;
+
     width: 100%;
+
     margin-top: 28px;
+
     padding: 16px;
+
     border: none;
+
     border-radius: 22px;
+
     background: #efadc2;
+
     color: white;
+
     font-size: 16px;
+
     font-weight: bold;
+
     cursor: pointer;
+
     transition: 0.2s ease;
 }
+
 
 .next-button:hover,
 .submit-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(220, 150, 175, 0.25);
+
+    box-shadow:
+        0 8px 20px rgba(220, 150, 175, 0.25);
 }
 
 
-/* ==============================
+/* =========================
    戻るボタン
-   「次へ」と同じサイズ
-   ============================== */
+========================= */
 
 .back-button {
     display: block;
+
     width: 100%;
+
     margin-top: 28px;
+
     padding: 16px;
+
     border: none;
+
     border-radius: 22px;
 
-    /* グレー */
-    background: #b8b5b7;
+    background: #aaa7aa;
 
     color: white;
+
     font-size: 16px;
+
     font-weight: bold;
 
     cursor: pointer;
+
     transition: 0.2s ease;
 }
 
+
+/* 戻るボタン hover */
+
 .back-button:hover {
-    background: #9f9b9e;
+    background: #918e91;
+
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(100, 100, 100, 0.15);
+
+    box-shadow:
+        0 8px 20px rgba(100, 100, 100, 0.15);
 }
 
 
-/* ==============================
-   Q11以降は青系
-   ※ 背景の四角は青くしない
-   ============================== */
+/* =========================
+   CURRENTページ
+========================= */
+
+/*
+   青い四角い背景はつけない。
+   白いカードのまま。
+*/
 
 .current-section {
     background: transparent;
 }
 
 
-/* Question 11〜15のラベル */
+/* CURRENTのラベル */
 
 .current-section .question-label {
     background: #eaf5ff;
+
     color: #4a90c2;
 }
 
 
-/* Question 11〜15の選択肢
-   選択する前から「薄い青」 */
+/* =========================
+   Q11〜Q15の選択肢
+========================= */
+
+/*
+   選択する前から
+   「うっすら青」
+*/
 
 .current-section .option {
     background: #f3f9ff;
 }
 
 
-/* Q11〜15の選択肢 hover */
+/* マウスを乗せたとき */
 
 .current-section .option:hover {
     background: #edf7ff;
+
+    transform: translateY(-2px);
 }
 
 
-/* Q11〜15で選択したとき */
+/* 選択したとき */
 
 .current-section .option:has(input:checked) {
     background: #e5f3ff;
+
     border-color: #4a90c2;
 }
 
 
-/* Q11〜15のラジオボタン */
+/* Q11〜Q15のラジオボタン */
 
 .current-section .option input {
     accent-color: #4a90c2;
 }
 
 
-/* Q11〜15の次へボタン */
+/* =========================
+   Q11〜Q15のボタン
+========================= */
 
 .current-section .next-button,
 .current-section .submit-button {
@@ -313,125 +478,157 @@ h2 {
 }
 
 
-/* Q11〜15の次へボタン hover */
-
 .current-section .next-button:hover,
 .current-section .submit-button:hover {
-    box-shadow: 0 8px 20px rgba(74, 144, 194, 0.25);
+    box-shadow:
+        0 8px 20px rgba(74, 144, 194, 0.25);
 }
 
 
-/* ==============================
-   CURRENTの説明ページ
-   ============================== */
+/* =========================
+   CURRENT説明ページ
+========================= */
 
 .section-intro-page {
     background: transparent;
 }
 
+
 .section-intro-label {
     display: inline-block;
+
     padding: 6px 14px;
+
     margin-bottom: 15px;
+
     border-radius: 20px;
+
     background: #eaf5ff;
+
     color: #4a90c2;
+
     font-size: 13px;
+
     font-weight: bold;
 }
 
 
-/* ==============================
-   その他
-   ============================== */
+/* CURRENTページの「はじめる」ボタン */
+
+.section-intro-page .next-button {
+    background: #4a90c2;
+}
+
+
+.section-intro-page .next-button:hover {
+    box-shadow:
+        0 8px 20px rgba(74, 144, 194, 0.25);
+}
+
+
+/* =========================
+   完了ページ
+========================= */
 
 .complete {
     text-align: center;
 }
 
+
 .complete-icon {
     font-size: 60px;
 }
 
+
+/* =========================
+   Thanksページ
+   名前・メール
+========================= */
+
+.contact-info {
+    margin-top: 35px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #eee;
+
+    text-align: center;
+}
+
+
+.contact-name {
+    margin: 0 0 8px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    color: #665b63;
+}
+
+
+.contact-email {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #9b8c94;
+}
+
+
+/* =========================
+   例文
+========================= */
+
 .example {
     font-size: 14px;
+
     line-height: 1.7;
+
     color: #777;
+
     margin: 15px 0;
 }
 
 
-/* ==============================
-   スマホ
-   ============================== */
+/* =========================
+   スマートフォン
+========================= */
 
 @media (max-width: 600px) {
 
     .survey-card {
+        width: calc(100% - 30px);
+
         margin: 15px auto;
+
         padding: 25px 20px;
+
         border-radius: 25px;
     }
+
 
     h1 {
         font-size: 24px;
     }
 
+
     h2 {
         font-size: 19px;
     }
+
 
     .option {
         padding: 16px;
     }
 
+
     .back-button,
     .next-button,
     .submit-button {
         padding: 16px;
+
         border-radius: 22px;
     }
-}
-/* Thanksページのお名前・メールアドレス */
-.contact-info {
-    margin-top: 35px;
-    padding-top: 25px;
-    border-top: 1px solid #eee;
-    text-align: center;
-}
 
-.contact-name {
-    margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #665b63;
-}
-
-.contact-email {
-    margin: 0;
-    font-size: 14px;
-    color: #9b8c94;
-}
-/* =========================
-   戻るボタン
-========================= */
-
-.back-button {
-    width: 100%;
-    margin-top: 28px;
-    padding: 16px;
-    border: none;
-    border-radius: 22px;
-    background: #aaa7aa;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.back-button:hover {
-    background: #918e91;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(100, 100, 100, 0.2);
 }
