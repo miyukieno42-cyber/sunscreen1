@@ -7,7 +7,12 @@ body {
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
     color: #665b63;
-    background: linear-gradient(135deg, #fff1f5 0%, #fff9e8 50%, #eaf8f2 100%);
+    background: linear-gradient(
+        135deg,
+        #fff1f5 0%,
+        #fff9e8 50%,
+        #eaf8f2 100%
+    );
 }
 
 .survey-card {
@@ -63,7 +68,7 @@ h1 {
 
 .progress {
     height: 100%;
-    width: 12.5%;
+    width: 6.67%;
     background: #f2b5c9;
     border-radius: 20px;
     transition: width 0.4s ease;
@@ -90,6 +95,11 @@ h1 {
     }
 }
 
+
+/* ==============================
+   Question ラベル
+   ============================== */
+
 .question-label {
     display: inline-block;
     padding: 6px 14px;
@@ -113,6 +123,11 @@ h2 {
     font-size: 14px;
 }
 
+
+/* ==============================
+   選択肢
+   ============================== */
+
 .options {
     display: flex;
     flex-direction: column;
@@ -123,6 +138,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 12px;
+    width: 100%;
     padding: 16px;
     border-radius: 18px;
     background: #fff6f8;
@@ -148,6 +164,11 @@ h2 {
 .option span {
     font-size: 15px;
 }
+
+
+/* ==============================
+   テキスト入力
+   ============================== */
 
 .text-input,
 .textarea {
@@ -178,6 +199,11 @@ h2 {
     background: white;
 }
 
+
+/* ==============================
+   次へ・送信ボタン
+   ============================== */
+
 .next-button,
 .submit-button {
     width: 100%;
@@ -199,6 +225,126 @@ h2 {
     box-shadow: 0 8px 20px rgba(220, 150, 175, 0.25);
 }
 
+
+/* ==============================
+   戻るボタン
+   「次へ」と同じサイズ
+   ============================== */
+
+.back-button {
+    display: block;
+    width: 100%;
+    margin-top: 28px;
+    padding: 16px;
+    border: none;
+    border-radius: 22px;
+
+    /* グレー */
+    background: #b8b5b7;
+
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.back-button:hover {
+    background: #9f9b9e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(100, 100, 100, 0.15);
+}
+
+
+/* ==============================
+   Q11以降は青系
+   ※ 背景の四角は青くしない
+   ============================== */
+
+.current-section {
+    background: transparent;
+}
+
+
+/* Question 11〜15のラベル */
+
+.current-section .question-label {
+    background: #eaf5ff;
+    color: #4a90c2;
+}
+
+
+/* Question 11〜15の選択肢
+   選択する前から「薄い青」 */
+
+.current-section .option {
+    background: #f3f9ff;
+}
+
+
+/* Q11〜15の選択肢 hover */
+
+.current-section .option:hover {
+    background: #edf7ff;
+}
+
+
+/* Q11〜15で選択したとき */
+
+.current-section .option:has(input:checked) {
+    background: #e5f3ff;
+    border-color: #4a90c2;
+}
+
+
+/* Q11〜15のラジオボタン */
+
+.current-section .option input {
+    accent-color: #4a90c2;
+}
+
+
+/* Q11〜15の次へボタン */
+
+.current-section .next-button,
+.current-section .submit-button {
+    background: #4a90c2;
+}
+
+
+/* Q11〜15の次へボタン hover */
+
+.current-section .next-button:hover,
+.current-section .submit-button:hover {
+    box-shadow: 0 8px 20px rgba(74, 144, 194, 0.25);
+}
+
+
+/* ==============================
+   CURRENTの説明ページ
+   ============================== */
+
+.section-intro-page {
+    background: transparent;
+}
+
+.section-intro-label {
+    display: inline-block;
+    padding: 6px 14px;
+    margin-bottom: 15px;
+    border-radius: 20px;
+    background: #eaf5ff;
+    color: #4a90c2;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+/* ==============================
+   その他
+   ============================== */
+
 .complete {
     text-align: center;
 }
@@ -207,7 +353,20 @@ h2 {
     font-size: 60px;
 }
 
+.example {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #777;
+    margin: 15px 0;
+}
+
+
+/* ==============================
+   スマホ
+   ============================== */
+
 @media (max-width: 600px) {
+
     .survey-card {
         margin: 15px auto;
         padding: 25px 20px;
@@ -221,126 +380,15 @@ h2 {
     h2 {
         font-size: 19px;
     }
-}
 
-.example {
-    font-size: 14px;
-    line-height: 1.7;
-    color: #777;
-    margin: 15px 0;
-}
+    .option {
+        padding: 16px;
+    }
 
-
-/* =========================================
-   Q11〜Q15：現在の日焼け止め
-   ========================================= */
-
-/* 質問全体の青い背景はなし */
-.current-section {
-    background: transparent;
-}
-
-/* Questionラベル */
-.current-section .question-label {
-    background: #e5f3ff;
-    color: #4a90c2;
-}
-
-
-/* 選択肢をQ1と同じ縦並びにする */
-.current-section .options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-
-/* 選択前：薄い青 */
-.current-section .option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    border-radius: 18px;
-    background: #f0f8ff;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-
-/* マウスを乗せたとき */
-.current-section .option:hover {
-    background: #e8f4fc;
-    transform: translateY(-2px);
-}
-
-
-/* 選択したとき：濃いめの青 */
-.current-section .option:has(input:checked) {
-    background: #dceefe;
-    border-color: #4a90c2;
-}
-
-
-/* ラジオボタン */
-.current-section .option input {
-    accent-color: #4a90c2;
-}
-
-
-/* 選択肢の文字 */
-.current-section .option span {
-    font-size: 15px;
-}
-
-
-/* Q11〜Q15の「次へ」ボタン */
-.current-section .next-button {
-    background: #4a90c2;
-}
-
-
-/* 青い「次へ」ボタンのホバー */
-.current-section .next-button:hover {
-    box-shadow: 0 8px 20px rgba(74, 144, 194, 0.25);
-}
-
-
-/* =========================================
-   現在ページの入力欄
-   ========================================= */
-
-.current-section .text-input,
-.current-section .textarea {
-    border-color: #d8eaf5;
-}
-
-.current-section .text-input:focus,
-.current-section .textarea:focus {
-    border-color: #4a90c2;
-}
-
-/* =========================
-   戻るボタン
-========================= */
-
-.back-button {
-    width: 100%;
-    margin-top: 12px;
-    padding: 16px;
-    border: none;
-    border-radius: 22px;
-    background: #b8b8b8;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.back-button:hover {
-    background: #a5a5a5;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(120, 120, 120, 0.2);
+    .back-button,
+    .next-button,
+    .submit-button {
+        padding: 16px;
+        border-radius: 22px;
+    }
 }
