@@ -1,5 +1,7 @@
 const questions = document.querySelectorAll(".question");
+
 let currentQuestion = 0;
+
 const totalQuestions = questions.length;
 
 
@@ -8,12 +10,14 @@ const totalQuestions = questions.length;
 ========================= */
 
 function updateProgress() {
+
     const current = currentQuestion + 1;
 
     document.getElementById("currentQuestion").textContent = current;
     document.getElementById("totalQuestions").textContent = totalQuestions;
 
     const progress = (current / totalQuestions) * 100;
+
     document.getElementById("progress").style.width = progress + "%";
 }
 
@@ -23,12 +27,15 @@ function updateProgress() {
 ========================= */
 
 function showQuestion(number) {
+
     questions.forEach((question, index) => {
+
         question.classList.remove("active");
 
         if (index === number) {
             question.classList.add("active");
         }
+
     });
 
     updateProgress();
@@ -51,18 +58,83 @@ nextButtons.forEach((button) => {
         const requiredInputs = current.querySelectorAll("input[required]");
 
         for (const input of requiredInputs) {
+
             if (!input.checkValidity()) {
+
                 input.reportValidity();
+
                 return;
             }
+
         }
 
-        // 次の質問へ
+        // 次のページへ
         if (currentQuestion < totalQuestions - 1) {
+
             currentQuestion++;
+
             showQuestion(currentQuestion);
+
+            // ページ上部へ戻す
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
         }
+
     });
+
+});
+
+
+/* =========================
+   戻るボタンを全ページに追加
+========================= */
+
+questions.forEach((question, index) => {
+
+    // Q1には戻るボタンを表示しない
+    if (index === 0) {
+        return;
+    }
+
+    // 戻るボタンを作る
+    const backButton = document.createElement("button");
+
+    backButton.type = "button";
+
+    backButton.className = "back-button";
+
+    backButton.textContent = "← 戻る";
+
+
+    // 戻るボタンをクリック
+    backButton.addEventListener("click", () => {
+
+        if (currentQuestion > 0) {
+
+            currentQuestion--;
+
+            showQuestion(currentQuestion);
+
+            // ページ上部へ戻す
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+    });
+
+
+    // 「次へ」ボタンの前に入れる
+    const nextButton = question.querySelector(".next-button");
+
+    if (nextButton) {
+
+        question.insertBefore(backButton, nextButton);
+
+    }
 
 });
 
@@ -76,8 +148,11 @@ const form = document.getElementById("surveyForm");
 form.addEventListener("submit", (event) => {
 
     if (!form.checkValidity()) {
+
         event.preventDefault();
+
         form.reportValidity();
+
         return;
     }
 
@@ -85,7 +160,7 @@ form.addEventListener("submit", (event) => {
 
 
 /* =========================
-   最初の質問を表示
+   最初の質問
 ========================= */
 
 showQuestion(0);
@@ -104,10 +179,15 @@ if (feelingnowOther && feelingnowOtherText) {
     feelingnowOther.addEventListener("change", function () {
 
         if (this.checked) {
+
             feelingnowOtherText.style.display = "block";
+            feelingnowOtherText.focus();
+
         } else {
+
             feelingnowOtherText.style.display = "none";
             feelingnowOtherText.value = "";
+
         }
 
     });
@@ -124,11 +204,15 @@ if (importantOther && importantOtherText) {
     importantOther.addEventListener("change", function () {
 
         if (this.checked) {
+
             importantOtherText.style.display = "block";
             importantOtherText.focus();
+
         } else {
+
             importantOtherText.style.display = "none";
             importantOtherText.value = "";
+
         }
 
     });
@@ -145,11 +229,15 @@ if (wantOther && wantOtherText) {
     wantOther.addEventListener("change", function () {
 
         if (this.checked) {
+
             wantOtherText.style.display = "block";
             wantOtherText.focus();
+
         } else {
+
             wantOtherText.style.display = "none";
             wantOtherText.value = "";
+
         }
 
     });
