@@ -320,3 +320,27 @@ h2 {
 .current-section .textarea:focus {
     border-color: #4a90c2;
 }
+
+/* =========================
+   戻るボタン
+========================= */
+
+.back-button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 16px;
+    border: none;
+    border-radius: 22px;
+    background: #b8b8b8;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.back-button:hover {
+    background: #a5a5a5;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(120, 120, 120, 0.2);
+}
