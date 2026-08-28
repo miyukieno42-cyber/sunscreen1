@@ -251,3 +251,35 @@ if (wantOther && wantOtherText) {
     });
 
 }
+
+/* -------------------------
+   Q5
+------------------------- */
+
+const reasonOther =
+    document.getElementById("reasonOther");
+
+const reasonOtherText =
+    document.getElementById("reasonOtherText");
+
+if (reasonOther && reasonOtherText) {
+
+    reasonOther.addEventListener("change", function () {
+
+        if (this.checked) {
+
+            reasonOtherText.style.display = "block";
+
+            reasonOtherText.focus();
+
+        } else {
+
+            reasonOtherText.style.display = "none";
+
+            reasonOtherText.value = "";
+
+        }
+
+    });
+
+}
