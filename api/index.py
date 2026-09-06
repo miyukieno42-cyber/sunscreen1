@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
-import sqlite3
 import csv
 import io
 import os
 from datetime import datetime
+import psycopg
+
 
 app = Flask(
     __name__,
@@ -11,17 +12,46 @@ app = Flask(
     static_folder="../static"
 )
 
-# Vercelの一時領域にDBを作成
-DATABASE = "/tmp/survey.db"
+
+# =========================================================
+# Neon PostgreSQL の接続先を取得
+# =========================================================
+def get_database_url():
+    """
+    Vercel + Neon で設定されている接続情報を
+    上から順番に探します。
+    """
+
+    possible_urls = [
+        os.environ.get("DATABASE_URL"),
+        os.environ.get("POSTGRES_URL"),
+        os.environ.get("POSTGRES_URL_NON_POOLING"),
+        os.environ.get("DATABASE_URL_UNPOOLED"),
+        os.environ.get("POSTGRES_PRISMA_URL"),
+    ]
+
+    for url in possible_urls:
+        if url:
+            return url
+
+    raise RuntimeError(
+        "データベース接続情報が見つかりません。"
+        "VercelのEnvironment Variablesを確認してください。"
+    )
 
 
+# =========================================================
+# データベース接続
+# =========================================================
 def get_db():
-    conn = sqlite3.connect(DATABASE)
+    database_url = get_database_url()
 
-    # 最初にテーブルを作成
+    conn = psycopg.connect(database_url)
+
+    # テーブルがなければ自動で作成
     conn.execute("""
         CREATE TABLE IF NOT EXISTS responses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             created_at TEXT,
 
             age_range TEXT,
@@ -49,48 +79,26 @@ def get_db():
 
     conn.commit()
 
-    # すでに古いDBが存在する場合に備えて、
-    # 足りないカラムを自動的に追加する
-    existing_columns = {
-        row[1]
-        for row in conn.execute("PRAGMA table_info(responses)").fetchall()
-    }
-
-    required_columns = {
-        "gender": "TEXT",
-        "feelingnow": "TEXT",
-        "frequencynow": "TEXT",
-        "valuenow": "TEXT",
-        "value11now": "TEXT",
-        "important": "TEXT",
-        "want": "TEXT",
-        "feelingnow_other": "TEXT",
-        "important_other": "TEXT",
-        "want_other": "TEXT"
-    }
-
-    for column, column_type in required_columns.items():
-        if column not in existing_columns:
-            conn.execute(
-                f"ALTER TABLE responses ADD COLUMN {column} {column_type}"
-            )
-
-    conn.commit()
-
     return conn
 
 
+# =========================================================
+# アンケートページ
+# =========================================================
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
+# =========================================================
+# アンケート回答を保存
+# =========================================================
 @app.route("/submit", methods=["POST"])
 def submit():
 
-    # ==========================================
+    # =====================================================
     # 子どものころ
-    # ==========================================
+    # =====================================================
 
     age_range = request.form.get("age_range", "")
     gender = request.form.get("gender", "")
@@ -105,9 +113,19 @@ def submit():
     usage_feeling = request.form.get("usage_feeling", "")
     memory = request.form.get("memory", "")
 
-    # ==========================================
+    # =====================================================
+    # 「その他」の入力
+    # =====================================================
+
+    # Q5：使用した理由
+    reason_other = request.form.get("reason_other", "").strip()
+
+    if reason_other:
+        reason.append(f"その他: {reason_other}")
+
+    # =====================================================
     # 現在
-    # ==========================================
+    # =====================================================
 
     feelingnow = request.form.get("feelingnow", "")
     frequencynow = request.form.get("frequencynow", "")
@@ -116,16 +134,29 @@ def submit():
     important = request.form.get("important", "")
     want = request.form.get("want", "")
 
-    # ==========================================
-    # 「その他」の自由記述
-    # ==========================================
+    # =====================================================
+    # 現在の「その他」
+    # =====================================================
 
-    feelingnow_other = request.form.get("feelingnow_other", "")
-    important_other = request.form.get("important_other", "")
-    want_other = request.form.get("want_other", "")
+    feelingnow_other = request.form.get(
+        "feelingnow_other",
+        ""
+    ).strip()
 
-    # その他を選択していた場合、
-    # 「その他: ○○」という形で保存
+    important_other = request.form.get(
+        "important_other",
+        ""
+    ).strip()
+
+    want_other = request.form.get(
+        "want_other",
+        ""
+    ).strip()
+
+    # =====================================================
+    # 「その他」を選択していた場合
+    # =====================================================
+
     if feelingnow == "その他" and feelingnow_other:
         feelingnow = f"その他: {feelingnow_other}"
 
@@ -135,139 +166,161 @@ def submit():
     if want == "その他" and want_other:
         want = f"その他: {want_other}"
 
-    # ==========================================
+    # =====================================================
     # 複数選択を文字列に変換
-    # ==========================================
+    # =====================================================
 
     sunscreen_type_text = ", ".join(sunscreen_type)
     reason_text = ", ".join(reason)
 
-    # ==========================================
+    # =====================================================
     # 回答日時
-    # ==========================================
+    # =====================================================
 
-    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    created_at = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
-    # ==========================================
-    # データベースへ保存
-    # ==========================================
+    # =====================================================
+    # Neon PostgreSQL に保存
+    # =====================================================
 
     conn = get_db()
 
-    conn.execute(
-        """
-        INSERT INTO responses
-        (
-            created_at,
+    try:
 
-            age_range,
-            gender,
-            frequency,
-            sunscreen_type,
-            reason,
-            feeling,
-            product,
-            usage_feeling,
-            memory,
+        conn.execute(
+            """
+            INSERT INTO responses
+            (
+                created_at,
 
-            feelingnow,
-            frequencynow,
-            valuenow,
-            value11now,
-            important,
-            want,
+                age_range,
+                gender,
+                frequency,
+                sunscreen_type,
+                reason,
+                feeling,
+                product,
+                usage_feeling,
+                memory,
 
-            feelingnow_other,
-            important_other,
-            want_other
+                feelingnow,
+                frequencynow,
+                valuenow,
+                value11now,
+                important,
+                want,
+
+                feelingnow_other,
+                important_other,
+                want_other
+            )
+            VALUES (
+                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s
+            )
+            """,
+            (
+                created_at,
+
+                age_range,
+                gender,
+                frequency,
+                sunscreen_type_text,
+                reason_text,
+                feeling,
+                product,
+                usage_feeling,
+                memory,
+
+                feelingnow,
+                frequencynow,
+                valuenow,
+                value11now,
+                important,
+                want,
+
+                feelingnow_other,
+                important_other,
+                want_other
+            )
         )
-        VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-            ?, ?, ?, ?, ?, ?,
-            ?, ?, ?
-        )
-        """,
-        (
-            created_at,
 
-            age_range,
-            gender,
-            frequency,
-            sunscreen_type_text,
-            reason_text,
-            feeling,
-            product,
-            usage_feeling,
-            memory,
+        conn.commit()
 
-            feelingnow,
-            frequencynow,
-            valuenow,
-            value11now,
-            important,
-            want,
-
-            feelingnow_other,
-            important_other,
-            want_other
-        )
-    )
-
-    conn.commit()
-    conn.close()
+    finally:
+        conn.close()
 
     return redirect(url_for("thanks"))
 
 
+# =========================================================
+# 完了ページ
+# =========================================================
 @app.route("/thanks")
 def thanks():
     return render_template("thanks.html")
 
 
+# =========================================================
+# CSVダウンロード
+# =========================================================
 @app.route("/download_csv")
 def download_csv():
 
-    if not os.path.exists(DATABASE):
-        return "まだ回答データがありません。", 200
-
     conn = get_db()
 
-    cursor = conn.execute(
-        """
-        SELECT
-            id,
-            created_at,
+    try:
 
-            age_range,
-            gender,
-            frequency,
-            sunscreen_type,
-            reason,
-            feeling,
-            product,
-            usage_feeling,
-            memory,
+        cursor = conn.execute(
+            """
+            SELECT
+                id,
+                created_at,
 
-            feelingnow,
-            frequencynow,
-            valuenow,
-            value11now,
-            important,
-            want
-        FROM responses
-        ORDER BY id
-        """
-    )
+                age_range,
+                gender,
+                frequency,
+                sunscreen_type,
+                reason,
+                feeling,
+                product,
+                usage_feeling,
+                memory,
 
-    rows = cursor.fetchall()
+                feelingnow,
+                frequencynow,
+                valuenow,
+                value11now,
+                important,
+                want
 
-    conn.close()
+            FROM responses
 
-    # ==========================================
+            ORDER BY id
+            """
+        )
+
+        rows = cursor.fetchall()
+
+    finally:
+        conn.close()
+
+    # =====================================================
+    # 回答がない場合
+    # =====================================================
+
+    if not rows:
+        return "まだ回答データがありません。", 200
+
+    # =====================================================
     # CSV作成
-    # ==========================================
+    # =====================================================
 
-    output = io.StringIO()
+    output = io.StringIO(newline="")
 
     writer = csv.writer(output)
 
@@ -295,21 +348,24 @@ def download_csv():
 
     writer.writerows(rows)
 
-    # ==========================================
-    # CSVをダウンロード
-    # ==========================================
+    # Excelでも日本語が文字化けしにくいUTF-8 BOM
+    csv_data = output.getvalue().encode("utf-8-sig")
 
     response = Response(
-        output.getvalue(),
-        mimetype="text/csv; charset=utf-8"
+        csv_data,
+        mimetype="text/csv"
     )
 
-    response.headers[
-        "Content-Disposition"
-    ] = "attachment; filename=sunscreen_survey.csv"
+    response.headers["Content-Disposition"] = (
+        "attachment; filename=sunscreen_survey.csv"
+    )
 
     return response
 
+
+# =========================================================
+# ローカルで実行した場合
+# =========================================================
 
 if __name__ == "__main__":
     app.run(debug=True)
